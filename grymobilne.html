@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gry bez instalowania!</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+          background-color: black;
+    }
+    .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #357ec7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .loading-text {
+        font-size: 24px;
+        color: white;
+        animation: pulse 0.5s infinite alternate;
+    }
+    @keyframes pulse {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    .image-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-top: 50px; /* Space for the loading screen */
+    }
+    .image-container img {
+        width: 70px;
+        height: 70px;
+        margin: 0px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-text">Prosze czekać...</div>
+</div>
+<div class="image-container" id="imageContainer" style="display: none;">
+</div>
+
+<script>
+    // Function to fetch JSON data from the provided URL
+    async function fetchData(url) {
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    // Function to display images and link them to URLs
+    function displayImages(data) {
+        const imageContainer = document.getElementById('imageContainer');
+        imageContainer.innerHTML = ''; // Clear previous content
+
+        data.forEach(item => {
+            const img = document.createElement('img');
+            img.src = item.thumb;
+            img.alt = 'Image';
+            img.addEventListener('click', () => {
+                window.open("https://grybezinstalowania.github.io/graj.html?game=" + item.url, '_self'); // Open link in the same tab
+            });
+            imageContainer.appendChild(img);
+        });
+
+        // Hide loading screen and display images
+        document.getElementById('loadingScreen').style.display = 'none';
+        imageContainer.style.display = 'flex';
+    }
+
+    // URL of the JSON data
+    const apiUrl = 'https://gamemonetize.com/rssfeed.php?format=json&category=All&type=mobile&popularity=newest&company=All&amount=1000';
+
+    // Fetch data and display images
+    fetchData(apiUrl)
+        .then(data => {
+            if (data && data.length > 0) {
+                displayImages(data);
+            } else {
+                console.error('No data found.');
+            }
+        });
+</script>
+</body>
+</html>
