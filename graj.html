@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gry Chrome</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Hide scrollbars */
+        background-color: #222;
+        font-family: Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+    #game-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        z-index: 9999; /* Ensure the game container is on top */
+    }
+    #iframe-container {
+        flex-grow: 1;
+    }
+    #sidebar {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 2;
+    }
+    #play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 100px;
+        color: #007bff;
+        z-index: 2; /* Ensure the play button is on top */
+    }
+    #play-button:hover {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+</style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="sidebar">
+        <button id="home-button">🏠grybezinstalowania</button>
+    </div>
+    <div id="iframe-container"></div>
+    <button id="play-button">▶️</button>
+</div>
+
+<script>
+    const playButton = document.getElementById('play-button');
+    const iframeContainer = document.getElementById('iframe-container');
+
+    playButton.addEventListener('click', () => {
+        // Hide the play button
+        playButton.style.display = 'none';
+
+        // Get the game URL from the query string
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameUrl = urlParams.get('game');
+
+        // Create and set up the iframe
+        const iframe = document.createElement('iframe');
+        iframe.src = gameUrl;
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+
+        // Add the iframe to the container
+        iframeContainer.innerHTML = '';
+        iframeContainer.appendChild(iframe);
+
+        // Enter full screen mode
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        } else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
+            document.documentElement.mozRequestFullScreen();
+        } else if (document.documentElement.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
+            document.documentElement.msRequestFullscreen();
+        }
+    });
+
+    // Home button functionality
+    const homeButton = document.getElementById('home-button');
+    homeButton.addEventListener('click', () => {
+        // Replace 'your_home_url' with the URL you want to redirect to
+        window.location.href = 'javascript:history.go(-1)';
+    });
+</script>
+
+</body>
+</html>
