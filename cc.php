@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $secretKey = "YOUR_SECRET_KEY";
+    $secretKey = "6Ld0kFsqAAAAANbLDJIuc5eI8XNLuxMp8mbE2xtP";
     $token = $_POST['recaptchaResponse'];
     
     $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$token");
